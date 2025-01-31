@@ -13,9 +13,9 @@ from torch import load as torch_load
 from config import WEEK_FREQUENCY_TIMEINDEX
 from forecast_model import ForecastModel
 
-DEFAULT_BATCH_SIZE = 64
+DEFAULT_BATCH_SIZE = 4
 DEFAULT_LEARNING_RATE = 0.0005
-DEFAULT_MAX_STEPS = 100
+DEFAULT_MAX_STEPS = 250
 WEEK_FREQUENCY_INDICATOR = "W"
 
 
@@ -147,11 +147,18 @@ class NeuralForecastModel(ForecastModel, metaclass=abc.ABCMeta):
         formated_train_data = pd.concat(formated_train_data, axis=0).reset_index(drop=True)
         return formated_train_data
 
+    def standard_scaler(self, data: Union[pd.DataFrame, pd.Series]):
+        scale_factor_mean = data.iloc[:self.scale_period].mean(axis=0).values
+        # For constant timeseries, std is equal to 0. In that case, we replace the std by 1 to avoid inf or nan.
+        scale_factor_std = data.iloc[:self.scale_period].std(axis=0).replace(0., 1.).values
+        scaled_data = (data - scale_factor_mean) / scale_factor_std
+        return scaled_data, scale_factor_mean, scale_factor_std
+
     def fit(self, historical_data: pd.DataFrame, time_index: Optional[str] = None):
         print(f"Fitting model with {len(historical_data.T)} time series ...")
         scaled_data, _, _ = self.standard_scaler(historical_data)
         y_train = self.format_multiple_ts(scaled_data, time_index=time_index)
-        self.model.fit(df=y_train)
+        self.model.fit(df=y_train, val_size=self.horizon)
 
     def predict(
         self, historical_data: pd.DataFrame, time_index: Optional[int] = None

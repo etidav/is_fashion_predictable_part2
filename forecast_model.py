@@ -46,10 +46,3 @@ class ForecastModel(BaseModel, ABC):
             Fitting method for models
         """
         pass
-
-    def standard_scaler(self, data: Union[pd.DataFrame, pd.Series]):
-        scale_factor_mean = data.iloc[:self.scale_period].mean(axis=0).values
-        # For constant timeseries, std is equal to 0. In that case, we replace the std by 1 to avoid inf or nan.
-        scale_factor_std = data.iloc[:self.scale_period].std(axis=0).replace(0., 1.).values
-        scaled_data = (data - scale_factor_mean) / scale_factor_std
-        return scaled_data, scale_factor_mean, scale_factor_std

@@ -2,6 +2,7 @@ import multiprocessing
 from enum import Enum
 from functools import partial
 from typing import Dict, Optional, Tuple
+import logging
 
 import pandas as pd
 
@@ -9,6 +10,13 @@ from config import WEEK_FREQUENCY_TIMEINDEX
 from forecast_model import ForecastModel
 from prophet import Prophet
 from tqdm import tqdm
+
+
+#remove prophet info outputs.
+logger = logging.getLogger('cmdstanpy')
+logger.addHandler(logging.NullHandler())
+logger.propagate = False
+logger.setLevel(logging.CRITICAL)
 
 
 class ProphetForecastModelType(str, Enum):
