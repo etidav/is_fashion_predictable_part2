@@ -172,7 +172,7 @@ class NeuralForecastModel(ForecastModel, metaclass=abc.ABCMeta):
         predictions = predictions * scale_factor_std + scale_factor_mean
         # set negative values to 0
         predictions[predictions < 0] = 0.
-        predictions_index = pd.date_range(
+        forecast_index = pd.date_range(
             start=historical_data.index[-1],
             periods=self.horizon + 1,
             freq=WEEK_FREQUENCY_TIMEINDEX
@@ -180,7 +180,7 @@ class NeuralForecastModel(ForecastModel, metaclass=abc.ABCMeta):
         forecast = pd.DataFrame(
             predictions,
             columns=historical_data.columns,
-            index=predictions_index,
+            index=forecast_index,
         )
         return forecast
 
