@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Union
+from typing import Optional
 
 import pandas as pd
-from config import PREDICTION_ONE_YEAR, WEEKS_IN_YEAR
+from config import PREDICTION_ONE_YEAR
 from pydantic import BaseModel
 
 
@@ -12,7 +12,6 @@ class ForecastModel(BaseModel, ABC):
     """
 
     horizon: int = PREDICTION_ONE_YEAR
-    scale_period: int = 2 * WEEKS_IN_YEAR
     model_type: Optional[str]
 
     @classmethod

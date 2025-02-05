@@ -10,7 +10,7 @@ import pandas as pd
 from neuralforecast import NeuralForecast
 from torch import load as torch_load
 
-from config import WEEK_FREQUENCY_TIMEINDEX
+from config import WEEK_FREQUENCY_TIMEINDEX, WEEKS_IN_YEAR
 from forecast_model import ForecastModel
 
 DEFAULT_BATCH_SIZE = 4
@@ -47,6 +47,7 @@ class NeuralForecastModel(ForecastModel, metaclass=abc.ABCMeta):
 
     model_type: Optional[NeuralForecastModelType]
     model: Optional[NeuralForecast] = None
+    scale_period: int = 2 * WEEKS_IN_YEAR
 
     max_steps: int = DEFAULT_MAX_STEPS
     learning_rate: float = DEFAULT_LEARNING_RATE
