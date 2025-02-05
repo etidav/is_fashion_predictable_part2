@@ -1,8 +1,6 @@
 import os
 from typing import Dict
 
-import matplotlib.cm as cm
-import matplotlib.pyplot as plt
 import pandas as pd
 from config import WEEKS_IN_YEAR
 from metrics import mape, mase, smape
