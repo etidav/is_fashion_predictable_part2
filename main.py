@@ -2,18 +2,18 @@ import os
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-from neuralforecast_model import (
+from model.neuralforecast_model import (
     DeepARForecastModel, NBeatsForecastModel, NeuralForecastModelType, NHitsForecastModel,
     PatchTSTForecastModel, TimeMixerForecastModel, TSMixerForecastModel
 )
-from prophet_model import ProphetForecastModel, ProphetForecastModelType
-from snaive_model import SnaiveForecastModel, SnaiveForecastModelType
-from statsforecast_model import (
+from model.prophet_model import ProphetForecastModel, ProphetForecastModelType
+from model.snaive_model import SnaiveForecastModel, SnaiveForecastModelType
+from model.statsforecast_model import (
     ArimaForecastModel, EtsForecastModel, StatsForecastModelType, TbatsForecastModel,
     ThetaForecastModel
 )
 from utils import (
-    errors_distribution, eval_predictions, load_forecast, load_time_series_csv, mean_errors_ranking,
+    eval_predictions, load_forecast, load_time_series_csv, mean_errors_ranking,
     save_forecast
 )
 
@@ -75,4 +75,3 @@ else:
 
 error_metrics = eval_predictions(fashion_ts, models_forecasts)
 mean_errors_ranking(error_metrics=error_metrics, output_path="mean_errors_ranking.csv")
-errors_distribution(error_metrics=error_metrics, output_path="errors_distribution.png")
